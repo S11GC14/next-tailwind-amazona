@@ -5,24 +5,21 @@ import { XCircleIcon } from '@heroicons/react/outline';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 
-export default function CartScreen() {
+function CartScreen() {
     const router = useRouter();
     const { state, dispatch } = useContext(Store);
-
     const {
         cart: { cartItems },
     } = state;
-
     const removeItemHandler = (item) => {
         dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
     };
-
     const updateCartHandler = (item, qty) => {
         const quantity = Number(qty);
-        dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } })
-    }
-
+        dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+    };
     return (
         <Layout title="Shopping Cart">
             <h1 className="mb-4 text-xl">Shopping Cart</h1>
@@ -63,14 +60,14 @@ export default function CartScreen() {
                                             <select
                                                 value={item.quantity}
                                                 onChange={(e) =>
-                                                    updateCartHandler(item, e.target.value)}>
-                                                {
-                                                    [...Array(item.countInStock).keys()].map(x => (
-                                                        <option key={x + 1} value={x + 1}>
-                                                            {x + 1}
-                                                        </option>
-                                                    ))
+                                                    updateCartHandler(item, e.target.value)
                                                 }
+                                            >
+                                                {[...Array(item.countInStock).keys()].map((x) => (
+                                                    <option key={x + 1} value={x + 1}>
+                                                        {x + 1}
+                                                    </option>
+                                                ))}
                                             </select>
                                         </td>
                                         <td className="p-5 text-right">${item.price}</td>
@@ -107,3 +104,5 @@ export default function CartScreen() {
         </Layout>
     );
 }
+
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false });
