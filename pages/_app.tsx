@@ -2,7 +2,13 @@ import React from 'react';
 import '../styles/globals.css';
 import { StoreProvider } from '../utils/Store';
 
-function MyApp({ Component, pageProps }) {
+interface Props {
+  Component: any;
+  pageProps: React.Component;
+}
+
+
+function MyApp({ Component, pageProps }: Props) {
   return (
     <StoreProvider>
       <Component {...pageProps} />
