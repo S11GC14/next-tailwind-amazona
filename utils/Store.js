@@ -4,8 +4,9 @@ import Cookies from 'js-cookie';
 export const Store = createContext();
 
 const initialState = {
-    cart: Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) :
-        { cartItems: [], shippingAddress: {} }
+    cart: Cookies.get('cart')
+        ? JSON.parse(Cookies.get('cart'))
+        : { cartItems: [], shippingAddress: {} },
 };
 
 function reducer(state, action) {
@@ -36,9 +37,9 @@ function reducer(state, action) {
                 cart: {
                     cartItems: [],
                     shippingAddress: { location: {} },
-                    paymentMethod: ''
+                    paymentMethod: '',
                 },
-            }
+            };
         case 'SAVE_SHIPPING_ADDRESS':
             return {
                 ...state,
@@ -46,10 +47,10 @@ function reducer(state, action) {
                     ...state.cart,
                     shippingAddress: {
                         ...state.cart.shippingAddress,
-                        ...action.payload
+                        ...action.payload,
                     },
                 },
-            }
+            };
         default:
             return state;
     }

@@ -1,18 +1,9 @@
-import React from 'react';
+import '../styles/globals.css';
 import { SessionProvider, useSession } from 'next-auth/react';
 import { StoreProvider } from '../utils/Store';
-import '../styles/globals.css';
 import { useRouter } from 'next/router';
 
-
-interface Props {
-  Component: any;
-  pageProps: React.Component;
-  session: any;
-}
-
-
-function MyApp({ Component, pageProps, session }: Props) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   return (
     <SessionProvider session={session}>
       <StoreProvider>
@@ -28,7 +19,7 @@ function MyApp({ Component, pageProps, session }: Props) {
   );
 }
 
-function Auth(children: any) {
+function Auth({ children }: any) {
   const router = useRouter();
   const { status } = useSession({
     required: true,
@@ -37,8 +28,9 @@ function Auth(children: any) {
     },
   });
   if (status === 'loading') {
-    return <div>Loding...</div>;
+    return <div>Loading...</div>;
   }
+
   return children;
 }
 

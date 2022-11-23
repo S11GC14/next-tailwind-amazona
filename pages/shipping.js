@@ -45,6 +45,7 @@ export default function ShippingScreen() {
                 },
             })
         );
+
         router.push('/payment');
     };
 
