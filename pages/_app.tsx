@@ -4,11 +4,17 @@ import { StoreProvider } from '../utils/Store';
 import { useRouter } from 'next/router';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
+const SCRIPT_PROVIDER_OPTIONS = {
+  "client-id": "test",
+};
+
 function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   return (
     <SessionProvider session={session}>
       <StoreProvider>
-        <PayPalScriptProvider deferLoading={true}>
+        <PayPalScriptProvider
+          options={SCRIPT_PROVIDER_OPTIONS}
+          deferLoading={true}>
           {Component.auth ? (
             <Auth>
               <Component {...pageProps} />

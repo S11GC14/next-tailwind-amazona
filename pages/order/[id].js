@@ -18,10 +18,13 @@ function reducer(state, action) {
             return { ...state, loading: false, error: action.payload };
         case 'PAY_REQUEST':
             return { ...state, loadingPay: true };
+        case 'PAY_SUCCESS':
+            return { ...state, loadingPay: false, successPay: true };
         case 'PAY_FAIL':
-            return { ...state, loading: false, error: action.payload };
+            return { ...state, loadingPay: false, errorPay: action.payload };
         case 'PAY_RESET':
             return { ...state, loadingPay: false, successPay: false, errorPay: '' };
+
         default:
             state;
     }
@@ -29,16 +32,16 @@ function reducer(state, action) {
 function OrderScreen() {
     // order/:id
     const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
     const { query } = useRouter();
     const orderId = query.id;
 
-    const [{ loading, error, order, successPay, loadingPay },
-        dispatch
-    ] = useReducer(reducer, {
-        loading: true,
-        order: {},
-        error: '',
-    });
+    const [{ loading, error, order, successPay, loadingPay }, dispatch] =
+        useReducer(reducer, {
+            loading: true,
+            order: {},
+            error: '',
+        });
     useEffect(() => {
         const fetchOrder = async () => {
             try {
@@ -56,16 +59,16 @@ function OrderScreen() {
             }
         } else {
             const loadPaypalScript = async () => {
-                const { data: clientID } = await axios.get(`/api/keys/paypal`);
+                const { data: clientId } = await axios.get('/api/keys/paypal');
                 paypalDispatch({
                     type: 'resetOptions',
                     value: {
-                        'client-id': clientID,
+                        'client-id': clientId,
                         currency: 'USD',
                     },
                 });
                 paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-            }
+            };
             loadPaypalScript();
         }
     }, [order, orderId, paypalDispatch, successPay]);
@@ -106,7 +109,7 @@ function OrderScreen() {
                     details
                 );
                 dispatch({ type: 'PAY_SUCCESS', payload: data });
-                toast.success('Order is paid successgully');
+                toast.success('Order is paid successfully');
             } catch (err) {
                 dispatch({ type: 'PAY_FAIL', payload: getError(err) });
                 toast.error(getError(err));
@@ -157,8 +160,8 @@ function OrderScreen() {
                                 <thead className="border-b">
                                     <tr>
                                         <th className="px-5 text-left">Item</th>
-                                        <th className="p-5 text-right">Quantity</th>
-                                        <th className="p-5 text-right">Price</th>
+                                        <th className="    p-5 text-right">Quantity</th>
+                                        <th className="  p-5 text-right">Price</th>
                                         <th className="p-5 text-right">Subtotal</th>
                                     </tr>
                                 </thead>
