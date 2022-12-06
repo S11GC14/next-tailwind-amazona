@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs';
 import User from '../../../models/User';
 import db from '../../../utils/db';
 
+//Api to create a user in the database
 async function handler(req, res) {
     if (req.method !== 'POST') {
         return;
